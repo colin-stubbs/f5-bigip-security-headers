@@ -1,0 +1,10 @@
+ltm profile http HTTPS-Default-1 {
+  defaults-from http
+    hsts {
+        include-subdomains disabled
+        maximum-age 16070400
+        mode enabled
+        preload enabled
+    }
+    proxy-type reverse
+}
