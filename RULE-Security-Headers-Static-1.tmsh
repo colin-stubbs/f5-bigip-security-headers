@@ -55,7 +55,7 @@ when HTTP_RESPONSE {
   call security_header {Referrer-Policy} {0} "strict-origin"
 
   # Expect-CT
-  call security_header {Expect-CT} {0} "enforce, max-age=30'"
+  call security_header {Expect-CT} {0} "enforce, max-age=30"
 
   # Expect-Staple
   call security_header {Expect-Staple} {0} "max-age=3600; includeSubDomains; preload"
