@@ -1,0 +1,63 @@
+ltm rule RULE-Security-Headers-1 { # RULE-Security-Headers-1
+
+# NOTE: The HSTS header is NOT shown below, as you should really just use the available LTM HTTP profile options to set this
+
+# helper function to avoid code duplication within event
+proc security_header { header_name header_replace header_value } {
+  # use RFC2616 Linear White Space ? set to 1 if so
+  set use_lws {0}
+
+  # if header exists and arg #2 indicates we should replace it remove first to nuke all instances of this header then insert
+  set insert {0}
+  if { [HTTP::header exists ${header_name}] and ${header_replace} equals {1} } {
+    HTTP::header remove ${header_name}
+    set insert {1}
+  } elseif { not [HTTP::header exists ${header_name}] } {
+    set insert {1}
+  }
+  
+  if { ${use_lws} equals {1} } { 
+    HTTP::header insert lws ${header_name} ${header_value}
+    return 0
+  } else {
+    HTTP::header insert ${header_name} ${header_value}
+    return 0
+  }
+
+  # header was not inserted or replaced
+  return 1
+}
+when RULE_INIT {
+  log local0. "initialised..."
+}
+when HTTP_RESPONSE {
+  # set your CSP header value here; variable used to simply setting the normal header and the X- variant
+  set csp_value "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self'; upgrade-insecure-requests; report-uri 'https://telemetry.lab.routedlogic.net/i/r/HDwsVmtwebiC4i7bbhJN/csp'"
+
+  # Content-Security-Policy
+  call security_header {Content-Security-Policy} {0} ${csp_value}
+  
+  # X-Content-Security-Policy
+  call security_header {X-Content-Security-Policy} {0} ${csp_value}
+  
+  # X-Frame-Options
+  call security_header {X-Frame-Options} {0}  "DENY"
+
+  # X-Content-Type-Options
+  call security_header {X-Content-Type-Options} {0} "nosniff"
+
+  # X-XSS-Protection
+  call security_header {X-XSS-Protection} {0} "1; mode=block"
+
+  # Referrer-Policy
+  call security_header {Referrer-Policy} {0} "strict-origin"
+
+  # Expect-CT
+  call security_header {Expect-CT} {0} "enforce, max-age=30'"
+
+  # Expect-Staple
+  call security_header {Expect-Staple} {0} "max-age=3600; includeSubDomains; preload"
+}
+
+# EOR
+}
