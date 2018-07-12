@@ -1,4 +1,4 @@
-ltm profile http HTTPS-HSTS-Preload {
+ltm profile http HTTPS-HSTS-Profile-Example {
   defaults-from http
     hsts {
         include-subdomains disabled
