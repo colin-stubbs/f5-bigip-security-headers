@@ -18,9 +18,11 @@ proc security_header { header_name header_replace header_value } {
   
   if { ${use_lws} equals {1} } { 
     HTTP::header insert lws ${header_name} ${header_value}
+    unset insert use_lws
     return 0
   } else {
     HTTP::header insert ${header_name} ${header_value}
+    unset insert use_lws
     return 0
   }
 
@@ -57,6 +59,8 @@ when HTTP_RESPONSE {
 
   # Expect-Staple
   call security_header {Expect-Staple} {0} "max-age=3600; includeSubDomains; preload"
+  
+  unset csp_value
 }
 
 # EOR
