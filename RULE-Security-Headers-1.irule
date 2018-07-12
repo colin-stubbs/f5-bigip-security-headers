@@ -32,7 +32,7 @@ when RULE_INIT {
 }
 when HTTP_RESPONSE {
   # set your CSP header value here; variable used to simply setting the normal header and the X- variant
-  set csp_value "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self'; upgrade-insecure-requests; report-uri 'https://telemetry.lab.routedlogic.net/i/r/HDwsVmtwebiC4i7bbhJN/csp'"
+  set csp_value "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self'; upgrade-insecure-requests"
 
   # Content-Security-Policy
   call security_header {Content-Security-Policy} {0} ${csp_value}
