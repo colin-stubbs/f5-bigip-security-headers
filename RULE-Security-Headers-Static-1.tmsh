@@ -1,6 +1,6 @@
 ltm rule RULE-Security-Headers-1 { # RULE-Security-Headers-1
 
-# NOTE: The HSTS header is NOT shown below, as you should really just use the available LTM HTTP profile options to set this
+# NOTE: The HSTS header is NOT shown below, as you should really just use the available LTM HTTP profile options to set this, see HTTP-HSTS-Profile.tmsh config example in this repository
 
 # helper function to avoid code duplication within event
 proc security_header { header_name header_replace header_value } {
