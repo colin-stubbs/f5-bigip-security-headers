@@ -16,11 +16,11 @@ proc security_header { header_name header_replace header_value } {
     set insert {1}
   }
   
-  if { ${use_lws} equals {1} } { 
+  if { ${use_lws} equals {1} and ${insert} equals {1} } { 
     HTTP::header insert lws ${header_name} ${header_value}
     unset insert use_lws
     return 0
-  } else {
+  } elseif { ${insert} equals {1} } {
     HTTP::header insert ${header_name} ${header_value}
     unset insert use_lws
     return 0
