@@ -59,6 +59,9 @@ when HTTP_RESPONSE {
 
   # Expect-Staple
   call security_header {Expect-Staple} {0} "max-age=3600; includeSubDomains; preload"
+
+  # Feature-Policy
+  call security_header {Feature-Policy} {0} "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none'"
   
   unset csp_value
 }
